@@ -1,30 +1,39 @@
-import { Equipe, EquipeModel } from "../models/equipesModel";
+import pool from '../database/dbConfig';
 
 class EquipeService {
-    private equipeModel:  EquipeModel;
+    async createEquipe(data: any) {
+        const { nome } = data;
+        const checkResult = await pool.query('SELECT * FROM equipes WHERE nome = $1', [nome]);
+        if (checkResult.rows.length > 0) {
+            throw new Error('Nome da equipe já existe');
+        }
 
-    constructor() {
-        this.equipeModel = new EquipeModel();
+        const result = await pool.query('INSERT INTO equipes (nome) VALUES ($1) RETURNING *', [nome]);
+        return result.rows[0];
     }
 
-    async createEquipe(equipeData: Equipe): Promise<Equipe> {
-        return this.equipeModel.createEquipe(equipeData);
+    async getAllEquipes() {
+        const result = await pool.query('SELECT * FROM equipes');
+        return result.rows;
     }
 
-    async getAllEquipes(): Promise<Equipe[]> {
-        return this.equipeModel.getAllEquipes();
+    async getEquipeById(id: number) {
+        const result = await pool.query('SELECT * FROM equipes WHERE id = $1', [id]);
+        return result.rows[0];
     }
 
-    async getEquipeById(id: number): Promise<Equipe> {
-        return this.equipeModel.getEquipeById(id);
+    async updateEquipe(id: number, data: any) {
+        const { nome } = data;
+        const result = await pool.query('UPDATE equipes SET nome = $1 WHERE id = $2 RETURNING *', [nome, id]);
+        return result.rows[0];
     }
 
-    async updateEquipe(id: number, equipeData: Equipe): Promise<Equipe> {
-        return this.equipeModel.updateEquipe(id, equipeData);
-    }
-
-    async deleteEquipe(id: number): Promise<void> {
-        return this.equipeModel.deleteEquipe(id);
+    async deleteEquipe(id: number) {
+        const result = await pool.query('DELETE FROM equipes WHERE id = $1 RETURNING *', [id]);
+        if (result.rowCount !== null && result.rowCount > 0) {
+            return true;
+        }
+        return false;
     }
 }
 

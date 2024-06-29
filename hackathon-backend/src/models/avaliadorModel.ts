@@ -10,6 +10,7 @@ interface Avaliador {
 class AvaliadorModel {
     async createAvaliador(avaliador: Avaliador): Promise<Avaliador> {
         const { nome, login, senha } = avaliador;
+
         const { rows } = await pool.query(
             "INSERT INTO avaliadores (nome, login, senha) VALUES ($1, $2, $3) RETURNING *",
             [nome, login, senha]

@@ -1,53 +1,75 @@
-import { Request, Response } from "express";
-import EquipeService from "../services/equipesService";
+import { Request, Response } from 'express';
+import EquipeService from '../services/equipesService';
 
-class equipesController {
+class EquipesController {
     async createEquipes(req: Request, res: Response): Promise<Response> {
         try {
-          const equipes = await EquipeService.createEquipe(req.body);
-          return res.status(201).json(equipes);
+            const equipes = await EquipeService.createEquipe(req.body);
+            return res.status(201).json(equipes);
         } catch (error) {
-          return res.status(500).json({ error: "Erro contate o Supervisor!" });
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
 
     async getAllEquipes(req: Request, res: Response): Promise<Response> {
         try {
-          const equipes = await EquipeService.getAllEquipes();
-          return res.status(200).json(equipes);
+            const equipes = await EquipeService.getAllEquipes();
+            return res.status(200).json(equipes);
         } catch (error) {
-          return res.status(500).json({ error: "Erro contate o Supervisor!" });
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
 
     async getEquipeById(req: Request, res: Response): Promise<Response> {
         try {
-          const equipe = await EquipeService.getEquipeById(Number(req.params.id));
-          return res.status(200).json(equipe);
+            const equipe = await EquipeService.getEquipeById(Number(req.params.id));
+            if (!equipe) {
+                return res.status(404).json({ error: 'Equipe não encontrada' });
+            }
+            return res.status(200).json(equipe);
         } catch (error) {
-          return res.status(500).json({ error: "Erro contate o Supervisor!" });
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
 
     async updateEquipe(req: Request, res: Response): Promise<Response> {
         try {
-          const equipe = await EquipeService.updateEquipe(Number(req.params.id), req.body);
-          return res.status(200).json(equipe);
+            const equipe = await EquipeService.updateEquipe(Number(req.params.id), req.body);
+            if (!equipe) {
+                return res.status(404).json({ error: 'Equipe não encontrada' });
+            }
+            return res.status(200).json(equipe);
         } catch (error) {
-          return res.status(500).json({ error: "Erro contate o Supervisor!" });
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
 
     async deleteEquipe(req: Request, res: Response): Promise<Response> {
         try {
-          await EquipeService.deleteEquipe(Number(req.params.id));
-          return res.status(200).json({ message: "Equipe deletada com sucesso!" });
+            const result = await EquipeService.deleteEquipe(Number(req.params.id));
+            if (!result) {
+                return res.status(404).json({ error: 'Equipe não encontrada' });
+            }
+            return res.status(200).json({ message: 'Equipe deletada com sucesso!' });
         } catch (error) {
-          return res.status(500).json({ error: "Erro contate o Supervisor!" });
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
 }
 
-export default new equipesController();
-
-
+export default new EquipesController();

@@ -1,39 +1,28 @@
-// src/middlewares/validationMiddleware.ts
-import { check, validationResult } from "express-validator";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcrypt';
+import pool from '../database/dbConfig';
 
-const validateUser = [
-  check("name").isString().notEmpty(),
-  check("login").isString().notEmpty(),
-  check("password").isLength({ min: 6 }),
-  check("email").isEmail(),
-  check("profile").isString().notEmpty(),
-  check("cpf").isString().isLength({ min: 11, max: 11 }),
-  check("birthdate").isISO8601(),
-  check("status").isBoolean(),
-  (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+const validationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const { login, senha } = req.body;
+
+  try {
+    const result = await pool.query('SELECT * FROM avaliadores WHERE login = $1', [login]);
+    if (result.rows.length === 0) {
+      return res.status(401).send('Login ou senha inválidos');
     }
-    next();
-  },
-];
 
-const validateAddress = [
-  check("user_id").isInt(),
-  check("street").isString().notEmpty(),
-  check("city").isString().notEmpty(),
-  check("state").isString().notEmpty(),
-  check("zip_code").isString().notEmpty(),
-  check("country").isString().notEmpty(),
-  (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    const avaliador = result.rows[0];
+    const passwordMatch = await bcrypt.compare(senha, avaliador.senha);
+
+    if (!passwordMatch) {
+      return res.status(401).send('Login ou senha inválidos');
     }
-    next();
-  },
-];
 
-export { validateUser, validateAddress };
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro no servidor');
+  }
+};
+
+export default validationMiddleware;
