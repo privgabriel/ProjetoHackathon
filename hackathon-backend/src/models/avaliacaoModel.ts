@@ -28,6 +28,12 @@ class AvaliacaoModel {
     async deleteAvaliacoes(id: number): Promise<void> {
         await pool.query("DELETE FROM avaliacoes WHERE id = $1", [id]);
     }
+
+    async getAllAvaliacoes(): Promise<Avaliacao[]> {
+        const { rows } = await pool.query("SELECT * FROM avaliacoes");
+        return rows;
+
+    }
 }
 
 export { Avaliacao, AvaliacaoModel };

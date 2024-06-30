@@ -18,6 +18,10 @@ class AvaliacaoService {
     async deleteAvaliacoes(id: number): Promise<void> {
         return this.avaliacaoModel.deleteAvaliacoes(id);
     }
+
+    async getAllAvaliacoes(): Promise<Avaliacao[]> {
+        return this.avaliacaoModel.getAllAvaliacoes();
+    }
 }
 
 export default new AvaliacaoService();

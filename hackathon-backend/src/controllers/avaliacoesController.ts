@@ -58,6 +58,15 @@ async getAllAvaliacoesByUserId(
       return res.status(500).json({ error: "Erro contate o Supervisor!" });
     }
   }
+
+  async getAllAvaliacoes(req: Request, res: Response): Promise<Response> {
+    try {
+      const avaliacoes = await AvaliacaoService.getAllAvaliacoes();
+      return res.status(200).json(avaliacoes);
+    } catch (error) {
+      return res.status(500).json({ error: "Erro contate o Supervisor!" });
+    }
+  }
 }
 
 export default new avaliacoesController();
