@@ -1,9 +1,11 @@
 export interface ILogin {
-    email: string;
+    id: number;
+    nome: string;
+    login: string;
     senha: string;
 }
 
 export interface ILoginFormData {
-    email: string;
+    login: string;
     senha: string;
 }

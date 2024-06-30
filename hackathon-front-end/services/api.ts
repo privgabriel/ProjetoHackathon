@@ -1,13 +1,15 @@
-// api.js
-import axios from "axios";
+import axios from 'axios';
 
-// Define a URL base da API
-const baseURL = "http://localhost:3001";
-
-// Configuração do Axios
-const instance = axios.create({
-    baseURL,
-    // Outras configurações, se necessário
+const api = axios.create({
+    baseURL: 'http://localhost:3001',
 });
 
-export default instance;
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+export default api;
