@@ -4,5 +4,6 @@ export interface IEquipes {
 }
 
 export interface IEquipesData {
+    id: number;
     nome: string;
 }

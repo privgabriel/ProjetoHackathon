@@ -3,13 +3,66 @@ import { useEffect, useState } from 'react';
 import api from "../../../services/api";
 import { IEquipesData } from "../../../interfaces/IEquipes";
 
+const styles = {
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#3F8EBF',
+        padding: '20px'
+    },
+    logo: {
+        width: '200px',
+        marginBottom: '20px',
+        borderRadius: '10px'
+    },
+    title: {
+        color: '#ffffff',
+        marginBottom: '20px',
+        fontSize: '24px'
+    },
+    table: {
+        minWidth: '80%',
+        backgroundColor: '#ffffff',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        marginTop: '20px',
+        borderCollapse: 'collapse'
+    },
+    tableCell: {
+        padding: '10px',
+        borderBottom: '1px solid #ddd',
+        textAlign: 'left',
+        color: '#000'  // Mudança de cor para melhor contraste
+    },
+    deleteButton: {
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#ff4d4d',  // Cor vermelha para o botão de deletar
+        color: '#fff',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease'
+    },
+    deleteButtonHover: {
+        backgroundColor: '#cc0000'
+    },
+    tableHeader: {
+        backgroundColor: '#f2f2f2',
+        fontWeight: 'bold'
+    }
+};
+
 export default function ListaEquipes() {
-    const [equipes, setEquipes] = useState<IEquipesData[]>([]); // Corrigido para IEquipesData[]
+    const [equipes, setEquipes] = useState<IEquipesData[]>([]);
 
     useEffect(() => {
         async function fetchEquipes() {
             try {
-                const response = await api.get('/api/equipes');
+                const response = await api.get('api/equipes');
                 setEquipes(response.data);
             } catch (error) {
                 console.error('Erro ao buscar equipes:', error);
@@ -20,7 +73,7 @@ export default function ListaEquipes() {
 
     const handleDelete = async (id: number) => {
         try {
-            await api.delete(`/equipes/${id}`);
+            await api.delete(`api/equipes/${id}`);
             setEquipes(equipes.filter((equipe) => equipe.id !== id));
         } catch (error) {
             console.error('Erro ao excluir equipe:', error);
@@ -28,21 +81,34 @@ export default function ListaEquipes() {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Lista de Equipes</h1>
-            <ul className="space-y-4">
+        <div style={styles.container}>
+            <img src="/hackathon_logo.png" alt="Hackathon Logo" style={styles.logo}/>
+            <h1 style={styles.title}>Lista de Equipes</h1>
+            <table style={styles.table}>
+                <thead style={styles.tableHeader}>
+                <tr>
+                    <th style={styles.tableCell}>Nome</th>
+                    <th style={styles.tableCell}>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
                 {equipes.map((equipe) => (
-                    <li key={equipe.id} className="flex justify-between items-center p-4 bg-white shadow rounded">
-                        <span>{equipe.nome}</span>
-                        <button
-                            onClick={() => handleDelete(equipe.id)}
-                            className="bg-red-500 text-white p-2 rounded"
-                        >
-                            Excluir
-                        </button>
-                    </li>
+                    <tr key={equipe.id}>
+                        <td style={styles.tableCell}>{equipe.nome}</td>
+                        <td style={styles.tableCell}>
+                            <button
+                                onClick={() => handleDelete(equipe.id)}
+                                style={styles.deleteButton}
+                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = styles.deleteButtonHover.backgroundColor}
+                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = styles.deleteButton.backgroundColor}
+                            >
+                                Excluir
+                            </button>
+                        </td>
+                    </tr>
                 ))}
-            </ul>
+                </tbody>
+            </table>
         </div>
     );
 }
