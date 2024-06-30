@@ -6,6 +6,7 @@ export interface IAvaliacoes {
 }
 
 export interface IAvaliacoesData {
+    id: number;
     avaliador_id: number
     equipe_id: number;
     notas: JSON;
