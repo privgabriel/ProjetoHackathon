@@ -70,6 +70,18 @@ class EquipesController {
             return res.status(500).json({ error: 'Erro contate o Supervisor!' });
         }
     }
+
+    async atribuirEquipe(req: Request, res: Response): Promise<Response> {
+        try {
+            const equipe = await EquipeService.atribuirEquipe(Number(req.params.id), req.body);
+            return res.status(200).json(equipe);
+        } catch (error) {
+            if (error instanceof Error) {
+                return res.status(500).json({ error: error.message });
+            }
+            return res.status(500).json({ error: 'Erro contate o Supervisor!' });
+        }
+    }
 }
 
 export default new EquipesController();

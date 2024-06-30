@@ -1,4 +1,5 @@
 import pool from '../database/dbConfig';
+import {QueryResult} from "pg";
 
 class EquipeService {
     async createEquipe(data: any) {
@@ -35,6 +36,16 @@ class EquipeService {
         }
         return false;
     }
+
+    async atribuirEquipe(id: number, data: any): Promise<any> {
+        const { avaliador_id } = data;
+        const result: QueryResult<any> = await pool.query(
+            'UPDATE equipes SET avaliador_id = $2 WHERE id = $1 RETURNING *',
+            [id, avaliador_id]
+        );
+        return result.rows[0];
+    }
+
 }
 
 export default new EquipeService();

@@ -37,6 +37,15 @@ class EquipeModel {
     async deleteEquipe(id: number): Promise<void> {
         await pool.query("DELETE FROM equipes WHERE id = $1", [id]);
     }
+
+    async atribuirEquipe(id: number, avaliador_id: number): Promise<Equipe> {
+        const { rows } = await pool.query(
+            "UPDATE equipes SET avaliador_id = $2 WHERE id = $1 RETURNING *",
+            [id, avaliador_id]
+        );
+        return rows[0];
+
+    }
 }
 
 export { Equipe, EquipeModel };
