@@ -3,23 +3,22 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
-import { IAvaliadorData } from "../../../interfaces/IAvaliador";
+import { IEquipesData } from "../../../interfaces/IEquipes";
 import {router} from "next/client";
 
-export default function NewAvaliador() {
+export default function NewEquipe() {
     const router = useRouter();
-    const [FormDataAvaliador, setFormDataAvaliador] = useState<IAvaliadorData>({
+    const [FormDataEquipe, setFormDataEquipe] = useState<IEquipesData>({
         nome: "",
-        login: "",
-        senha: ""
     });
+
     const [error, setError] = useState<string | null>(null);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
-        setFormDataAvaliador({
-            ...FormDataAvaliador,
+        setFormDataEquipe({
+            ...FormDataEquipe,
             [e.target.name]: e.target.value
         });
         setError(null);  // Limpa a mensagem de erro ao alterar os campos
@@ -27,57 +26,37 @@ export default function NewAvaliador() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!FormDataAvaliador.nome || !FormDataAvaliador.login || !FormDataAvaliador.senha) {
+        if (!FormDataEquipe.nome) {
             setError("Todos os campos são obrigatórios.");
             return;
         }
-
         try {
-            await api.post("/api/avaliadores", FormDataAvaliador);
+            await api.post("/api/equipes", FormDataEquipe);
             router.push("/");
         } catch (error: any) {
             if (error.response && error.response.data) {
-                setError(error.response.data.message || "Erro ao criar avaliador. Por favor, tente novamente.");
+                setError(error.response.data.message || "Erro ao criar equipe. Por favor, tente novamente.");
             } else {
-                setError("Erro ao criar avaliador. Por favor, tente novamente.");
+                setError("Erro ao criar equipe. Por favor, tente novamente.");
             }
         }
     }
 
-    // @ts-ignore
-    // @ts-ignore
     return (
-        // @ts-ignore
         <div style={styles.container}>
             <img src="/hackathon_logo.png" alt="Hackathon Logo" style={styles.logo} />
-            <h1 style={styles.title}>Criar novo avaliador</h1>
+            <h1 style={styles.title}>Criar nova equipe</h1>
             <form onSubmit={handleSubmit} style={styles.form}>
                 <input
                     type="text"
                     name="nome"
-                    placeholder="Nome"
-                    value={FormDataAvaliador.nome}
+                    placeholder="Nome da Equipe"
+                    value={FormDataEquipe.nome}
                     onChange={handleChange}
                     style={styles.input}
                 />
-                <input
-                    type="text"
-                    name="login"
-                    placeholder="Login"
-                    value={FormDataAvaliador.login}
-                    onChange={handleChange}
-                    style={styles.input}
-                />
-                <input
-                    type="password"
-                    name="senha"
-                    placeholder="Senha"
-                    value={FormDataAvaliador.senha}
-                    onChange={handleChange}
-                    style={styles.input}
-                />
-                <button type="submit" style={styles.button}>Criar avaliador</button>
-                {error && <p style={styles.error}>{error}</p>}
+                {error && <div style={styles.error}>{error}</div>}
+                <button type="submit" style={styles.button}>Criar equipe</button>
             </form>
         </div>
     );
