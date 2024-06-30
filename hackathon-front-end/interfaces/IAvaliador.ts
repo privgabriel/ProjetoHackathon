@@ -6,6 +6,7 @@ export interface IAvaliador {
 }
 
 export interface IAvaliadorData {
+    id: number;
     nome: string;
     login: string;
     senha: string;

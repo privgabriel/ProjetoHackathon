@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4749579f-8978-42b1-a6af-0558824fd837" name="Changes" comment="Validação de login unico." />
+    <list default="true" id="4749579f-8978-42b1-a6af-0558824fd837" name="Changes" comment="Validação de login unico.">
+      <change afterPath="$PROJECT_DIR$/hackathon-front-end/src/app/listarAvaliadores/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon-front-end/interfaces/IAvaliador.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-front-end/interfaces/IAvaliador.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +35,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/Mercu/OneDrive/Desktop/ProjetoHackathon",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -39,7 +43,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.1.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\Users\\Mercu\\OneDrive\\Desktop\\ProjetoHackathon\\hackathon-front-end\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -78,6 +82,7 @@
       <workItem from="1719678853068" duration="3391000" />
       <workItem from="1719682535117" duration="932000" />
       <workItem from="1719767362562" duration="5470000" />
+      <workItem from="1719772838832" duration="1287000" />
     </task>
     <task id="LOCAL-00001" summary="Validação de login unico.">
       <option name="closed" value="true" />
