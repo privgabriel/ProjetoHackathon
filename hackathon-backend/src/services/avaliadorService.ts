@@ -8,6 +8,11 @@ class AvaliadorService {
             throw new Error('Nome do avaliador já existe');
         }
 
+        const checkResult2 = await pool.query('SELECT * FROM avaliadores WHERE login = $1', [login]);
+        if (checkResult2.rows.length > 0) {
+            throw new Error('Login do avaliador já existe');
+        }
+
         const result = await pool.query(
             'INSERT INTO avaliadores (nome, login, senha) VALUES ($1, $2, $3) RETURNING *',
             [nome, login, senha]
