@@ -1,6 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import api from "../../../services/api";
 import { IEquipesData } from "../../../interfaces/IEquipes";
 
@@ -11,10 +13,6 @@ interface IAvaliador {
 
 export default function NewEquipe() {
     const router = useRouter();
-    const [formDataEquipe, setFormDataEquipe] = useState<IEquipesData>({
-        nome: "",
-        avaliador_id: 0,
-    });
     const [avaliadores, setAvaliadores] = useState<IAvaliador[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -30,51 +28,57 @@ export default function NewEquipe() {
         fetchAvaliadores();
     }, []);
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>
-    ) => {
-        setFormDataEquipe({
-            ...formDataEquipe,
-            [e.target.name]: e.target.value
-        });
-        setError(null);  // Limpa a mensagem de erro ao alterar os campos
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!formDataEquipe.nome || !formDataEquipe.avaliador_id) {
-            setError("Todos os campos são obrigatórios.");
-            return;
-        }
-        try {
-            await api.post("/api/equipes", formDataEquipe);
-            router.push("/");
-        } catch (error: any) {
-            if (error.response && error.response.data) {
-                setError(error.response.data.message || "Erro ao criar equipe. Por favor, tente novamente.");
-            } else {
-                setError("Erro ao criar equipe. Por favor, tente novamente.");
+    const formik = useFormik({
+        initialValues: {
+            nome: "",
+            avaliador_id: 0,
+        },
+        validationSchema: Yup.object({
+            nome: Yup.string()
+                .required("Nome da equipe é obrigatório"),
+            avaliador_id: Yup.number()
+                .required("Avaliador é obrigatório")
+                .min(1, "Selecione um avaliador válido"),
+        }),
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
+            try {
+                await api.post("/api/equipes", values);
+                router.push("/");
+            } catch (error: any) {
+                if (error.response && error.response.data) {
+                    setError(error.response.data.message || "Erro ao criar equipe. Por favor, tente novamente.");
+                } else {
+                    setError("Erro ao criar equipe. Por favor, tente novamente.");
+                }
+            } finally {
+                setSubmitting(false);
             }
-        }
-    }
+        },
+    });
 
     return (
         <div style={styles.container}>
             <img src="/hackathon_logo.png" alt="Hackathon Logo" style={styles.logo} />
             <h1 style={styles.title}>Criar nova equipe</h1>
-            <form onSubmit={handleSubmit} style={styles.form}>
+            <form onSubmit={formik.handleSubmit} style={styles.form}>
                 <input
                     type="text"
                     name="nome"
                     placeholder="Nome da Equipe"
-                    value={formDataEquipe.nome}
-                    onChange={handleChange}
+                    value={formik.values.nome}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     style={styles.input}
                 />
+                {formik.touched.nome && formik.errors.nome ? (
+                    <div style={styles.error}>{formik.errors.nome}</div>
+                ) : null}
                 <select
                     name="avaliador_id"
-                    value={formDataEquipe.avaliador_id}
-                    onChange={handleChange}
+                    value={formik.values.avaliador_id}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     style={styles.input}
                 >
                     <option value="">Selecione o Avaliador</option>
@@ -84,8 +88,13 @@ export default function NewEquipe() {
                         </option>
                     ))}
                 </select>
+                {formik.touched.avaliador_id && formik.errors.avaliador_id ? (
+                    <div style={styles.error}>{formik.errors.avaliador_id}</div>
+                ) : null}
                 {error && <div style={styles.error}>{error}</div>}
-                <button type="submit" style={styles.button}>Criar equipe</button>
+                <button type="submit" style={styles.button} disabled={formik.isSubmitting}>
+                    Criar equipe
+                </button>
             </form>
         </div>
     );
