@@ -1,24 +1,40 @@
 "use client";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
 import { IEquipesData } from "../../../interfaces/IEquipes";
-import {router} from "next/client";
+
+interface IAvaliador {
+    id: number;
+    nome: string;
+}
 
 export default function NewEquipe() {
     const router = useRouter();
-    const [FormDataEquipe, setFormDataEquipe] = useState<IEquipesData>({
+    const [formDataEquipe, setFormDataEquipe] = useState<IEquipesData>({
         nome: "",
+        avaliador_id: 0,
     });
-
+    const [avaliadores, setAvaliadores] = useState<IAvaliador[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const fetchAvaliadores = async () => {
+            try {
+                const response = await api.get("/api/avaliadores");
+                setAvaliadores(response.data);
+            } catch (error) {
+                setError("Erro ao carregar avaliadores.");
+            }
+        };
+        fetchAvaliadores();
+    }, []);
+
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>
     ) => {
         setFormDataEquipe({
-            ...FormDataEquipe,
+            ...formDataEquipe,
             [e.target.name]: e.target.value
         });
         setError(null);  // Limpa a mensagem de erro ao alterar os campos
@@ -26,12 +42,12 @@ export default function NewEquipe() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!FormDataEquipe.nome) {
+        if (!formDataEquipe.nome || !formDataEquipe.avaliador_id) {
             setError("Todos os campos são obrigatórios.");
             return;
         }
         try {
-            await api.post("/api/equipes", FormDataEquipe);
+            await api.post("/api/equipes", formDataEquipe);
             router.push("/");
         } catch (error: any) {
             if (error.response && error.response.data) {
@@ -51,10 +67,23 @@ export default function NewEquipe() {
                     type="text"
                     name="nome"
                     placeholder="Nome da Equipe"
-                    value={FormDataEquipe.nome}
+                    value={formDataEquipe.nome}
                     onChange={handleChange}
                     style={styles.input}
                 />
+                <select
+                    name="avaliador_id"
+                    value={formDataEquipe.avaliador_id}
+                    onChange={handleChange}
+                    style={styles.input}
+                >
+                    <option value="">Selecione o Avaliador</option>
+                    {avaliadores.map((avaliador) => (
+                        <option key={avaliador.id} value={avaliador.id}>
+                            {avaliador.nome}
+                        </option>
+                    ))}
+                </select>
                 {error && <div style={styles.error}>{error}</div>}
                 <button type="submit" style={styles.button}>Criar equipe</button>
             </form>

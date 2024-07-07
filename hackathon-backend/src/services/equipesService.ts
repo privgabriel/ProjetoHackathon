@@ -1,15 +1,22 @@
 import pool from '../database/dbConfig';
 import {QueryResult} from "pg";
+import {Equipe} from "../models/equipesModel";
 
 class EquipeService {
-    async createEquipe(data: any) {
-        const { nome } = data;
+    async createEquipe(data: any): Promise<Equipe> {
+        const { nome, avaliador_id } = data;
+
+        // Verifica se o nome da equipe já existe
         const checkResult = await pool.query('SELECT * FROM equipes WHERE nome = $1', [nome]);
         if (checkResult.rows.length > 0) {
             throw new Error('Nome da equipe já existe');
         }
 
-        const result = await pool.query('INSERT INTO equipes (nome) VALUES ($1) RETURNING *', [nome]);
+        // Insere a nova equipe com o avaliador atribuído
+        const result = await pool.query(
+            'INSERT INTO equipes (nome, avaliador_id) VALUES ($1, $2) RETURNING *',
+            [nome, avaliador_id]
+        );
         return result.rows[0];
     }
 
@@ -36,16 +43,6 @@ class EquipeService {
         }
         return false;
     }
-
-    async atribuirEquipe(id: number, data: any): Promise<any> {
-        const { avaliador_id } = data;
-        const result: QueryResult<any> = await pool.query(
-            'UPDATE equipes SET avaliador_id = $2 WHERE id = $1 RETURNING *',
-            [id, avaliador_id]
-        );
-        return result.rows[0];
-    }
-
 }
 
 export default new EquipeService();

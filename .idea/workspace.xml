@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4749579f-8978-42b1-a6af-0558824fd837" name="Changes" comment="Validação de login unico.">
-      <change afterPath="$PROJECT_DIR$/hackathon-front-end/src/app/atribuirEquipe/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hackathon-backend/src/controllers/equipesController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-backend/src/controllers/equipesController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hackathon-backend/src/models/equipesModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-backend/src/models/equipesModel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hackathon-backend/src/routes/EquipesRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-backend/src/routes/EquipesRoutes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hackathon-backend/src/services/equipesService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-backend/src/services/equipesService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon-front-end/interfaces/IEquipes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-front-end/interfaces/IEquipes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon-front-end/src/app/atribuirEquipe/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon-front-end/src/app/cadastroEquipe/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-front-end/src/app/cadastroEquipe/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon-front-end/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/hackathon-front-end/src/app/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,21 +38,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Mercu/OneDrive/Desktop/ProjetoHackathon",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\Mercu\\OneDrive\\Desktop\\ProjetoHackathon\\hackathon-front-end\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Mercu/OneDrive/Desktop/ProjetoHackathon&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Mercu\\OneDrive\\Desktop\\ProjetoHackathon\\hackathon-front-end\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Mercu\OneDrive\Desktop\ProjetoHackathon\sql_backup" />
@@ -85,7 +88,8 @@
       <workItem from="1719678853068" duration="3391000" />
       <workItem from="1719682535117" duration="932000" />
       <workItem from="1719767362562" duration="5470000" />
-      <workItem from="1719772838832" duration="6512000" />
+      <workItem from="1719772838832" duration="6552000" />
+      <workItem from="1720385193397" duration="1681000" />
     </task>
     <task id="LOCAL-00001" summary="Validação de login unico.">
       <option name="closed" value="true" />
