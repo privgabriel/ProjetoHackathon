@@ -1,82 +1,91 @@
 "use client";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import api from "../../../services/api";
 import { IAvaliadorData } from "../../../interfaces/IAvaliador";
-import {router} from "next/client";
+import {useState} from "react";
 
 export default function NewAvaliador() {
     const router = useRouter();
-    const [FormDataAvaliador, setFormDataAvaliador] = useState<IAvaliadorData>({
-        nome: "",
-        login: "",
-        senha: ""
-    });
     const [error, setError] = useState<string | null>(null);
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-        setFormDataAvaliador({
-            ...FormDataAvaliador,
-            [e.target.name]: e.target.value
-        });
-        setError(null);  // Limpa a mensagem de erro ao alterar os campos
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!FormDataAvaliador.nome || !FormDataAvaliador.login || !FormDataAvaliador.senha) {
-            setError("Todos os campos são obrigatórios.");
-            return;
-        }
-
-        try {
-            await api.post("/api/avaliadores", FormDataAvaliador);
-            router.push("/");
-        } catch (error: any) {
-            if (error.response && error.response.data) {
-                setError(error.response.data.message || "Erro ao criar avaliador. Por favor, tente novamente.");
-            } else {
-                setError("Erro ao criar avaliador. Por favor, tente novamente.");
+    const formik = useFormik({
+        initialValues: {
+            nome: "",
+            login: "",
+            senha: "",
+        },
+        validationSchema: Yup.object({
+            nome: Yup.string()
+                .required("Nome é obrigatório"),
+            login: Yup.string()
+                .required("Login é obrigatório"),
+            senha: Yup.string()
+                .required("Senha é obrigatória")
+                .min(6, "Senha deve ter pelo menos 6 caracteres"),
+        }),
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
+            try {
+                await api.post("/api/avaliadores", values);
+                router.push("/");
+            } catch (error: any) {
+                if (error.response && error.response.data) {
+                    setError(error.response.data.message || "Erro ao criar avaliador. Por favor, tente novamente.");
+                } else {
+                    setError("Erro ao criar avaliador. Por favor, tente novamente.");
+                }
+            } finally {
+                setSubmitting(false);
             }
-        }
-    }
+        },
+    });
 
-    // @ts-ignore
-    // @ts-ignore
     return (
-        // @ts-ignore
         <div style={styles.container}>
             <img src="/hackathon_logo.png" alt="Hackathon Logo" style={styles.logo} />
             <h1 style={styles.title}>Criar novo avaliador</h1>
-            <form onSubmit={handleSubmit} style={styles.form}>
+            <form onSubmit={formik.handleSubmit} style={styles.form}>
                 <input
                     type="text"
                     name="nome"
                     placeholder="Nome"
-                    value={FormDataAvaliador.nome}
-                    onChange={handleChange}
+                    value={formik.values.nome}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     style={styles.input}
                 />
+                {formik.touched.nome && formik.errors.nome ? (
+                    <div style={styles.error}>{formik.errors.nome}</div>
+                ) : null}
                 <input
                     type="text"
                     name="login"
                     placeholder="Login"
-                    value={FormDataAvaliador.login}
-                    onChange={handleChange}
+                    value={formik.values.login}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     style={styles.input}
                 />
+                {formik.touched.login && formik.errors.login ? (
+                    <div style={styles.error}>{formik.errors.login}</div>
+                ) : null}
                 <input
                     type="password"
                     name="senha"
                     placeholder="Senha"
-                    value={FormDataAvaliador.senha}
-                    onChange={handleChange}
+                    value={formik.values.senha}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     style={styles.input}
                 />
-                <button type="submit" style={styles.button}>Criar avaliador</button>
+                {formik.touched.senha && formik.errors.senha ? (
+                    <div style={styles.error}>{formik.errors.senha}</div>
+                ) : null}
+                <button type="submit" style={styles.button} disabled={formik.isSubmitting}>
+                    Criar avaliador
+                </button>
                 {error && <p style={styles.error}>{error}</p>}
             </form>
         </div>
